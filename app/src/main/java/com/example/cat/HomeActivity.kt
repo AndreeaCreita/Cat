@@ -20,9 +20,9 @@ class HomeActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
-        val email = intent.getStringExtra("email")
-        val displayName = intent.getStringExtra("name")
-        findViewById<TextView>(R.id.textView).text = email + "\n" + displayName
+//        val email = intent.getStringExtra("email")
+//        val displayName = intent.getStringExtra("name")
+//        findViewById<TextView>(R.id.textView).text = email + "\n" + displayName
 
         findViewById<Button>(R.id.signOutBtn).setOnClickListener{
             auth.signOut()

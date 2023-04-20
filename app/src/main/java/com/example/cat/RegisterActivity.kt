@@ -43,7 +43,7 @@ class RegisterActivity : AppCompatActivity() {
                     withContext(Dispatchers.Main) {
 
                         Log.d("TAG", "This is a debug message")
-
+                        startActivity(Intent(this@RegisterActivity, HomeActivity::class.java))
                     }
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {

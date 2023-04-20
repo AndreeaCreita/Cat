@@ -4,7 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,6 +17,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
     //Google
@@ -51,6 +58,13 @@ class MainActivity : AppCompatActivity() {
         createnewAccount.setOnClickListener {
             startActivity(Intent(this@MainActivity, RegisterActivity::class.java))
         }
+        //Login nrm
+        findViewById<Button>(R.id.btnLogin).setOnClickListener {
+            loginUser()
+
+        }
+
+        //
     }
 
 //google
@@ -98,7 +112,33 @@ class MainActivity : AppCompatActivity() {
     }
 //  ---google
 
+//login
+private fun loginUser() {
+    val email = findViewById<EditText>(R.id.inputEmail).text.toString()
+    val password = findViewById<EditText>(R.id.inputPassword).text.toString()
+    if (email.isNotEmpty() && password.isNotEmpty()) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                auth.signInWithEmailAndPassword(email, password).await()
+                withContext(Dispatchers.Main) {
+                    Log.d("TAG", "This is a debug login message")
+                    startActivity(Intent(this@MainActivity, HomeActivity::class.java))
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@MainActivity, e.message, Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+}
 
+    override fun onStart() {
+
+        super.onStart()
+
+    }
+//
 }
 
 
