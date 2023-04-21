@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-
+//import kotlinx.android.synthetic.main.activity_add.*
 
 class AddActivity : AppCompatActivity() {
 
