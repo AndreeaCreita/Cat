@@ -24,8 +24,10 @@
         android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_add_place">
+        app:layout_constraintTop_toBottomOf="@id/toolbar_add_place"
+        app:layout_constraintVertical_bias="0.0">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -70,7 +72,7 @@
                     android:inputType="textCapSentences"
                     android:textColor="@color/primary_text_color"
                     android:textColorHint="@color/secondary_text_color"
-                    android:textSize="@dimen/edit_text_text_size"/>
+                    android:textSize="@dimen/edit_text_text_size" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -86,9 +88,9 @@
                     android:id="@+id/et_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/edit_text_hint_date"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
+                    android:hint="@string/edit_text_hint_date"
                     android:inputType="text"
                     android:textColor="@color/primary_text_color"
                     android:textColorHint="@color/secondary_text_color"
@@ -143,17 +145,16 @@
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/btn_save"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.45"
+                app:layout_constraintHorizontal_bias="0.594"
                 app:layout_constraintStart_toEndOf="@+id/iv_place_image"
                 app:layout_constraintTop_toBottomOf="@+id/til_location"
-                app:layout_constraintVertical_bias="0.019" />
+                app:layout_constraintVertical_bias="0.0" />
 
             <Button
                 android:id="@+id/btn_save"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/add_screen_btn_save_marginTop"
                 android:background="@drawable/shape_button_rounded"
                 android:gravity="center"
                 android:paddingTop="@dimen/add_screen_btn_save_paddingTopBottom"
@@ -161,9 +162,12 @@
                 android:text="@string/btn_text_save"
                 android:textColor="@color/white_color"
                 android:textSize="@dimen/btn_text_size"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/iv_place_image" />
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
     <!--END-->
