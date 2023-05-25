@@ -1,30 +1,37 @@
 package com.example.cat
+
 import android.Manifest
 import android.app.DatePickerDialog
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ServerValue
+
 import java.text.SimpleDateFormat
 import java.util.*
 
 class AddActivity : AppCompatActivity(), View.OnClickListener {
 
     private val CAMERA_REQUEST_CODE = 1
+
     private lateinit var tvAddImage: TextView
     private lateinit var ivPlaceImage: AppCompatImageView
-    private lateinit var etDate: TextInputEditText
+    private lateinit var etDate: TextView
+    private lateinit var etTitle: TextInputEditText
+    private lateinit var etDescription: TextInputEditText
     private var imageUri: Uri? = null
     private var cal = Calendar.getInstance()
 
@@ -35,9 +42,13 @@ class AddActivity : AppCompatActivity(), View.OnClickListener {
         tvAddImage = findViewById(R.id.tv_add_image)
         ivPlaceImage = findViewById(R.id.iv_place_image)
         etDate = findViewById(R.id.et_date)
+        etTitle = findViewById(R.id.et_title)
+        etDescription = findViewById(R.id.et_description)
+        val btnSave = findViewById<Button>(R.id.btn_save)
 
         tvAddImage.setOnClickListener(this)
         etDate.setOnClickListener(this)
+        btnSave.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -47,6 +58,9 @@ class AddActivity : AppCompatActivity(), View.OnClickListener {
             }
             R.id.et_date -> {
                 showDatePickerDialog()
+            }
+            R.id.btn_save -> {
+                saveDataToFirebase()
             }
         }
     }
@@ -60,7 +74,8 @@ class AddActivity : AppCompatActivity(), View.OnClickListener {
             val values = ContentValues()
             values.put(MediaStore.Images.Media.TITLE, "New Picture")
             values.put(MediaStore.Images.Media.DESCRIPTION, "From Camera")
-            imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+            imageUri =
+                contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
             val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
             startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE)
@@ -97,7 +112,41 @@ class AddActivity : AppCompatActivity(), View.OnClickListener {
     private fun updateDateInView() {
         val myFormat = "dd.MM.yyyy"
         val sdf = SimpleDateFormat(myFormat, Locale.getDefault())
-        etDate.setText(sdf.format(cal.time).toString())
+        etDate.text = sdf.format(cal.time).toString()
+    }
+
+    private fun saveDataToFirebase() {
+        // Get the image URI and date
+        val imageUriString = imageUri?.toString()
+        val date = etDate.text.toString()
+        val title = etTitle.text.toString()
+        val description = etDescription.text.toString()
+        // Create a DatabaseReference
+        val databaseRef = FirebaseDatabase.getInstance().reference
+
+        // Create a unique key for the new data entry
+        val newEntryKey = databaseRef.child("add_cat").push().key
+
+        // Create a new child node in the database and set the values
+        val newData = HashMap<String, Any>()
+        newData["imageUri"] = imageUriString!!
+        newData["date"] = date
+        newData["title"] = title
+        newData["description"] = description
+        newData["timestamp"] = ServerValue.TIMESTAMP
+
+        // Save the data to the database
+        if (newEntryKey != null) {
+            databaseRef.child("add_cat").child(newEntryKey).setValue(newData)
+                .addOnSuccessListener {
+                    // Data saved successfully
+                    Toast.makeText(this, "Data saved successfully", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener {
+                    // Failed to save data
+                    Toast.makeText(this, "Failed to save data", Toast.LENGTH_SHORT).show()
+                }
+        }
     }
 
     override fun onRequestPermissionsResult(
@@ -120,97 +169,3 @@ class AddActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//            R.id.tv_add_image -> {
-//                val pictureDialog = AlertDialog.Builder(this)
-//                pictureDialog.setTitle("Select Action")
-//                val pictureDialogItems =
-//                    arrayOf("Select photo from gallery", "Capture photo from camera")
-//                pictureDialog.setItems(
-//                    pictureDialogItems
-//                ) { dialog, which ->
-//                    when (which) {
-//                        // Here we have create the methods for image selection from GALLERY
-//                        //0 -> choosePhotoFromGallery()
-//                        1 -> Toast.makeText(this@AddActivity,"Camera selection coming soon...", Toast.LENGTH_SHORT).show()
-//                    }
-//                }
-//                pictureDialog.show()
-//            }
-
-
-//private fun choosePhotoFromGallery() {
-//
-//        Dexter.withContext(this)
-//            .withPermissions(
-//
-//            )
-//            .withListener(object : MultiplePermissionsListener {
-//                override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-//
-//                    if (report!!.areAllPermissionsGranted()) {
-//
-//                        Toast.makeText(this@AddActivity,"Storage READ/WRITE permission are granted. Now you can select an image from GALLERY or lets says phone storage.", Toast.LENGTH_SHORT).show()
-//                    }
-//                }
-//
-//                override fun onPermissionRationaleShouldBeShown(
-//                    p0: MutableList<com.karumi.dexter.listener.PermissionRequest>?,
-//                    p1: PermissionToken?
-//                ) {
-//                    showRationalDialogForPermissions()
-//                }
-//            }).onSameThread()
-//            .check()
-//
-//        // END
-//    }
-//    // END
-
-//    private fun showRationalDialogForPermissions() {
-//        AlertDialog.Builder(this)
-//            .setMessage("It Looks like you have turned off permissions required for this feature. It can be enabled under Application Settings")
-//            .setPositiveButton("GO TO SETTINGS"
-//            ) { _, _ ->
-//                try {
-//                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-//                    val uri = Uri.fromParts("package", packageName, null)
-//                    intent.data = uri
-//                    startActivity(intent)
-//                } catch (e: ActivityNotFoundException) {
-//                    e.printStackTrace()
-//                }
-//            }
-//            .setNegativeButton("Cancel") { dialog,
-//                                           _ ->
-//                dialog.dismiss()
-//            }.show()
-//    }
