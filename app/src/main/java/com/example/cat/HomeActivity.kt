@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 
 class HomeActivity : AppCompatActivity() {
@@ -20,6 +21,11 @@ class HomeActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
+        findViewById<FloatingActionButton>(R.id.fabCat).setOnClickListener {
+            val intent = Intent(this@HomeActivity, AddActivity::class.java)
+            startActivity(intent)
+        }
+
 //        val email = intent.getStringExtra("email")
 //        val displayName = intent.getStringExtra("name")
 //        findViewById<TextView>(R.id.textView).text = email + "\n" + displayName
@@ -28,25 +34,6 @@ class HomeActivity : AppCompatActivity() {
             auth.signOut()
             startActivity(Intent(this,MainActivity::class.java))
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
