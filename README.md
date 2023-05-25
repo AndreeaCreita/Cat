@@ -5,7 +5,7 @@
 Barem proiect - Android <br>
 1 punct din oficiu <br>
 1.0 punct: <br>
-- Implementat un RecyclerView( +0.5 functie de cautare) <br>
+- :ballot_box_with_check: Implementat un RecyclerView( +0.5 functie de cautare) <br>
 - Utilizat o metoda de navigatie: Navigation Drawer sau Bottom Navigation  <br>
 - :ballot_box_with_check: Implementat o metoda de Share (Android Sharesheet) <br>
 - Local Notifications with Deep Links (or you can use Firebase) <br>
