@@ -19,3 +19,4 @@ Barem proiect - Android <br>
 - :ballot_box_with_check: Web services (Retrofit, Moshi, Firebase) <br>
 - Dependency injection (Dagger || Koin) <br>
 - Video Playback sau video streaming <br>
+- :ballot_box_with_check: Prezentare intermediara
