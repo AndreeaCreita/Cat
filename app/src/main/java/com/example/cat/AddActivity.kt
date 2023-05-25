@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ServerValue
 
@@ -29,6 +30,8 @@ class AddActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var tvAddImage: TextView
     private lateinit var ivPlaceImage: AppCompatImageView
     private lateinit var etDate: TextView
+    private lateinit var etTitle: TextInputEditText
+    private lateinit var etDescription: TextInputEditText
     private var imageUri: Uri? = null
     private var cal = Calendar.getInstance()
 
@@ -39,6 +42,8 @@ class AddActivity : AppCompatActivity(), View.OnClickListener {
         tvAddImage = findViewById(R.id.tv_add_image)
         ivPlaceImage = findViewById(R.id.iv_place_image)
         etDate = findViewById(R.id.et_date)
+        etTitle = findViewById(R.id.et_title)
+        etDescription = findViewById(R.id.et_description)
         val btnSave = findViewById<Button>(R.id.btn_save)
 
         tvAddImage.setOnClickListener(this)
@@ -114,17 +119,20 @@ class AddActivity : AppCompatActivity(), View.OnClickListener {
         // Get the image URI and date
         val imageUriString = imageUri?.toString()
         val date = etDate.text.toString()
-
+        val title = etTitle.text.toString()
+        val description = etDescription.text.toString()
         // Create a DatabaseReference
         val databaseRef = FirebaseDatabase.getInstance().reference
 
         // Create a unique key for the new data entry
-        val newEntryKey = databaseRef.child("your_node_name").push().key
+        val newEntryKey = databaseRef.child("add_cat").push().key
 
         // Create a new child node in the database and set the values
         val newData = HashMap<String, Any>()
         newData["imageUri"] = imageUriString!!
         newData["date"] = date
+        newData["title"] = title
+        newData["description"] = description
         newData["timestamp"] = ServerValue.TIMESTAMP
 
         // Save the data to the database
